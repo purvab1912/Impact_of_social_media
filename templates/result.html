@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Results</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="/static/form.css">
+
+</head>
+
+<body>
+    <!-- Display User Information -->
+    <h2>User Information</h2>
+    <p><strong>First Name:</strong> {{ first_name }}</p>
+    <p><strong>Last Name:</strong> {{ last_name }}</p>
+    <p><strong>Email ID:</strong> {{ email }}</p>
+    <p><strong>Age:</strong> {{ age }}</p>
+    <h1>Test Results</h1>
+
+    <p><strong>Total Score:</strong> {{ total_score }}</p>
+    <p><strong>Interpretation:</strong> {{ result }}</p>
+
+    <h2>Section-wise Scores</h2>
+    <canvas id="scoreChart" width="400" height="200"></canvas>
+
+    <script>
+        // Ensure we safely pass section_scores to JavaScript as a valid JSON object
+        const sectionScores = {{ section_scores | tojson | safe }};
+
+        // If you want to check what's being passed, you can log the sectionScores here
+        console.log('sectionScores:', sectionScores);
+
+        const labels = Object.keys(sectionScores);  // Get section names
+        const scores = Object.values(sectionScores);  // Get corresponding scores
+
+        console.log('Labels:', labels);  // Check section names (labels)
+        console.log('Scores:', scores);  // Check scores
+
+        const data = {
+            labels: labels,
+            datasets: [{
+                label: 'Scores by Section',
+                data: scores,
+                backgroundColor: [
+                    'rgba(75, 162, 162, 0.2)',  
+                    'rgba(45, 132, 205, 0.2)',  
+                    'rgba(230, 185, 61, 0.2)', 
+                    'rgba(220, 70, 105, 0.2)'   
+                ],
+                borderColor: [
+                    'rgba(75, 162, 162, 1)',  
+                    'rgba(45, 132, 205, 1)', 
+                    'rgba(230, 185, 61, 1)', 
+                    'rgba(220, 70, 105, 1)'
+                ],
+                borderWidth: 1
+            }]
+        };
+
+        const config = {
+            type: 'pie',
+            data: data,
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            }
+        };
+
+        const ctx = document.getElementById('scoreChart').getContext('2d');
+        new Chart(ctx, config);
+    </script>
+    <div class="retest">
+        <a href="/" ></a><button>Take the Test Again</button></a>
+
+    </div>
+
+    
+</body>
+
+</html>

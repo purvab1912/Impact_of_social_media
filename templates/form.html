@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Media Psychometric Test</title>
+    <link rel="stylesheet" href="/static/form.css">
+</head>
+<body>
+    <h1>Social Media Psychometric Test</h1>
+      <!-- Flash message container -->
+      {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+          <div id="flash-messages">
+              {% for category, message in messages %}
+                  <div class="flash-message {{ category }}">{{ message }}</div>
+              {% endfor %}
+          </div>
+      {% endif %}
+  {% endwith %}
+    <form method="POST" action="/form">
+
+         <!-- New Fields for Personal Information -->
+         <h2>Personal Information</h2>
+         <label1 for="first_name">First Name:</label><br>
+         <input type="text" id="first_name" name="first_name" required><br><br>
+ 
+         <label1 for="last_name">Last Name:</label><br>
+         <input type="text" id="last_name" name="last_name" required><br><br>
+ 
+         <label1 for="email">Email ID:</label><br>
+         <input type="email" id="email" name="email" required><br><br>
+ 
+         <label1 for="age">Age:</label><br>
+         <input type="number" id="age" name="age" min="1" required><br><br>
+
+         <!--questions-->
+        {% for section, section_questions in questions.items() %}
+            <h2>{{ section }}</h2>
+            {% for q in section_questions %}
+                <p>{{ q.question }}</p>
+                {% for option in q.options %}
+                    <label>
+                        <input type="radio" name="{{ q.id }}" value="{{ option[0] }}" required>
+                        {{ option }}
+                    </label><br>
+                {% endfor %}
+            {% endfor %}
+        {% endfor %}
+        <button type="submit">Submit</button>
+    </form>
+    <script>
+        // Automatically display flash messages as popups
+        document.addEventListener("DOMContentLoaded", function() {
+            const messages = document.querySelectorAll(".flash-message");
+            messages.forEach(msg => {
+                alert(msg.textContent); // Display each message as a popup
+            });
+        });
+    </script>
+</body>
+</html>
